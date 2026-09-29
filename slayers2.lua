@@ -10,7 +10,7 @@ local VirtualInputManager = game:GetService("VirtualInputManager")
 local LocalPlayer = Players.LocalPlayer
 local VirtualUser = game:GetService("VirtualUser")
 
--- ระบบ Anti AFK ป้องกันหลุดออกจากเกม
+
 LocalPlayer.Idled:Connect(function()
     VirtualUser:CaptureController()
     VirtualUser:ClickButton2(Vector2.new())
@@ -32,7 +32,7 @@ local Tabs = {
     Setting = Window:AddTab({ Title = "Setting", Icon = "settings" })
 }
 
--- รายชื่อพิกัด CFrame สำหรับวาร์ปไปจุดเกิด
+
 local TargetData = {
     ["Akazo"] = CFrame.new(-1120.5061, 1383.97339, -1760.20959, -0.230756849, 0, -0.973011434, 0, 1, 0, 0.973011434, 0, -0.230756849),
     ["Domae"] = CFrame.new(-257.8992, 1352.99988, -3451.61963, -0.162874728, -5.35437458e-11, -0.986646771, 6.56710103e-11, 1, -6.51093138e-11, 0.986646771, -7.53987497e-11, -0.162874728),
@@ -110,14 +110,14 @@ local function pressSkillZ()
     end)
 end
 
--- ปรับปรุงระบบ Tween ให้มีความเร็วที่ปลอดภัย ไม่โดนระบบกันโปรเตะ (ปรับความเร็วลดลงให้อยู่ในเกณฑ์ปลอดภัย)
+
 local function safeTweenTo(targetCFrame)
     local character = LocalPlayer.Character
     if not character or not character:FindFirstChild("HumanoidRootPart") then return end
     local rootPart = character.HumanoidRootPart
     
     local distance = (rootPart.Position - targetCFrame.Position).Magnitude
-    -- คำนวณเวลาให้เหมาะสม ไม่เร็วเกินไป (ประมาณ 400 Studs ต่อวินาที ป้องกันโดนเตะ)
+    
     local travelTime = math.clamp(distance / 400, 0.15, 0.8)
     
     local tweenInfo = TweenInfo.new(travelTime, Enum.EasingStyle.Linear)
@@ -137,7 +137,7 @@ local function safeTweenTo(targetCFrame)
     end
 end
 
--- Single Farm Variables
+
 local selectedFarmTarget = sortedNames[1]
 local autoFarmEnabled = false
 local lastToggleTime = tick()
@@ -147,7 +147,7 @@ local lastMonsterPosition = nil
 local farmState = "Fighting"
 local lootingStartTime = 0
 
--- Multi Farm Variables
+
 local multiFarmEnabled = false
 local selectedMultiTargets = {}
 local multiTargetQueue = {}
@@ -159,7 +159,7 @@ local multiMonsterPos = nil
 local multiLootTimer = 0
 local activeLockedTarget = nil
 
--- UI Setup
+
 local FarmDropdown = Tabs.Farming:AddDropdown("AutoFarmDropdown", {
     Title = "Select Farm Target",
     Values = sortedNames,
@@ -236,9 +236,9 @@ MultiFarmToggle:OnChanged(function(Value)
     end
 end)
 
--- MAIN LOOP
+
 RunService.Heartbeat:Connect(function()
-    -- 1. Single Farm Logic
+  
     if autoFarmEnabled then
         local character = LocalPlayer.Character
         if not character or not character:FindFirstChild("HumanoidRootPart") then return end
@@ -321,7 +321,7 @@ RunService.Heartbeat:Connect(function()
             end
         end
 
-    -- 2. Multi Farm Loop Logic (ใช้ Safe Tween ป้องกันเตะ)
+    
     elseif multiFarmEnabled then
         if #multiTargetQueue == 0 then return end
 
@@ -346,7 +346,7 @@ RunService.Heartbeat:Connect(function()
                 return
             end
 
-            -- ใช้ Safe Tween ในการเคลื่อนที่ข้ามจุดเกิด ป้องกัน Anti-Cheat ตรวจจับว่าเทเลพอร์ตหรือบินไวเกินไป
+           
             safeTweenTo(baseCFrame)
             task.wait(0.2)
 
